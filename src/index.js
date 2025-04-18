@@ -18,8 +18,6 @@ app.use(cors({
 
 app.use(express.json())
 
-app.options('*', cors());
-
 const iniciarServer = async () => {
     await connectDB();
 
