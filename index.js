@@ -4,6 +4,7 @@ import dotenv from "dotenv";
 import { connectDB } from "./config/db.js";
 import router from "./routes/PacientesRouter.js";
 import routerDoc from "./routes/DoctorRouter.js";
+import serverless from "serverless-http";
 
 dotenv.config();
 const app = express();
@@ -22,16 +23,14 @@ app.use(
 
 app.use(express.json());
 
-const iniciarServer = async () => {
-  await connectDB();
+await connectDB();
 
-  app.use(router);
-  app.use(routerDoc);
+app.use("/api", router);
+app.use("/api", routerDoc);
 
-  const PORT = process.env.PORT || 4000;
-  app.listen(PORT, () => {
-    console.log(`Conectado al puerto: ${PORT}`);
-  });
-};
+const handler = serverless(app);
 
-iniciarServer();
+export const GET = handler;
+export const POST = handler;
+export const PUT = handler;
+export const DELETE = handler;
