@@ -9,12 +9,6 @@ const db = new Sequelize(process.env.DATABASE_URL, {
   define: {
     timestamps: false,
   },
-  //   dialectOptions: {
-  //     ssl: {
-  //       require: true,
-  //       rejectUnauthorized: false, // esto es importante para Supabase
-  //     },
-  //   },
 });
 
 export const connectDB = async () => {
@@ -22,7 +16,7 @@ export const connectDB = async () => {
     await db.authenticate();
     console.log("Conectado a la Base de Datos");
   } catch (error) {
-    console.error("No se pudo conectar a la Base de Datos:", error);
+    console.error("No se pudo conectar a la Base de Datos:", error.message);
   }
 };
 

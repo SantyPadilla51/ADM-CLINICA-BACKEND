@@ -1,6 +1,7 @@
 import Paciente from "../models/PacienteModels.js";
 import Historial from "../models/HistorialModel.js";
 import Examen from "../models/ExamenModels.js";
+import supabase from "../supabase/supabaseClient.js";
 
 const obtenerPacientes = async (req, res) => {
   const pacientes = await Paciente.findAll({
@@ -37,7 +38,6 @@ const obtenerPacienteID = async (req, res) => {
 
   const doctorIdPaciente = paciente[0].doctorId;
 
-  // res.json({ Paciente: paciente[0].doctorId, doctor: req.doctor.id });
   if (doctorIdPaciente !== req.doctor.id) {
     res.json({ msg: "Accion no valida" });
   } else {
@@ -136,7 +136,7 @@ const obtenerHistorial = async (req, res) => {
   const { id } = req.params;
 
   const historial = await Historial.findAll({
-    where: { idPaciente: id },
+    where: { pacienteId: id },
   });
 
   if (!historial) {
@@ -148,24 +148,20 @@ const obtenerHistorial = async (req, res) => {
 
 const crearHistorial = async (req, res) => {
   const historial = new Historial(req.body);
-  historial.idPaciente = req.params.id;
+  historial.pacienteId = req.params.id;
 
   try {
     const historialGuardado = await historial.save();
 
-    if (historialGuardado) {
-      res.json({
-        ok: true,
-        msg: "Consulta creada correctamente",
-      });
-    } else {
-      return res.json({
-        ok: false,
-        msg: "El historial no se pudo crear correctamente",
-      });
-    }
+    res.json({
+      ok: true,
+      msg: "Consulta creada correctamente",
+    });
   } catch (error) {
-    res.send({ msg: error.message });
+    res.json({
+      ok: false,
+      msg: error.message,
+    });
   }
 };
 
@@ -175,7 +171,7 @@ const eliminarHistorial = async (req, res) => {
   const historial = await Historial.findByPk(id);
 
   if (!historial) {
-    return res.status(404).json({ msg: "El historial no existe" });
+    return res.json({ msg: "El historial no existe" });
   }
 
   try {
@@ -190,18 +186,85 @@ const eliminarHistorial = async (req, res) => {
   }
 };
 
+const crearExamen = async (req, res) => {
+  const { descripcion, pacienteId, imagenUrl } = req.body;
+
+  try {
+    const examen = await Examen.create({
+      descripcion,
+      pacienteId,
+      imagenUrl,
+    });
+
+    res.json({ ok: true, msg: "Examen guardado con imagen" });
+  } catch (error) {
+    res.status(500).json({ ok: false, msg: error.message });
+  }
+};
+
+const eliminarExamen = async (req, res) => {
+  const { id } = req.params;
+
+  try {
+    // Buscar el examen incluyendo la información del paciente si es necesario
+    const examen = await Examen.findByPk(id);
+
+    if (!examen) {
+      return res.status(404).json({ ok: false, msg: "El examen no existe" });
+    }
+
+    // Extraer el nombre del archivo de la URL de la imagen
+    const imagenUrl = examen.imagenUrl;
+    const fileName = imagenUrl.split("/").pop();
+
+    // Eliminar la imagen del almacenamiento en Supabase
+    const { error: storageError } = await supabase.storage
+      .from("examenes")
+      .remove([`imagenes/${fileName}`]);
+
+    if (storageError) {
+      console.error("Error al eliminar la imagen:", storageError);
+      throw new Error("Error al eliminar la imagen del almacenamiento");
+    }
+
+    // Eliminar el registro de la base de datos
+    await examen.destroy();
+
+    res.json({ ok: true, msg: "Examen e imagen eliminados correctamente" });
+  } catch (error) {
+    console.error("Error en eliminarExamen:", error);
+    res.status(500).json({
+      ok: false,
+      msg: error.message || "Error al eliminar el examen",
+    });
+  }
+};
+
 const obtenerExamenes = async (req, res) => {
   const { id } = req.params;
 
-  const examenes = await Examen.findAll({
-    where: { idPaciente: id },
-  });
+  try {
+    const examenes = await Examen.findAll({
+      where: { pacienteId: id },
+    });
 
-  if (!examenes) {
-    return res.status(404).json({ msg: "El paciente no existe" });
+    if (!examenes || examenes.length === 0) {
+      return res.status(404).json({ msg: "El paciente aun no tiene exámenes" });
+    }
+
+    const examenesConImagen = examenes.map((examen) => ({
+      id: examen.id,
+      pacienteId: examen.pacienteId,
+      descripcion: examen.descripcion,
+      fecha: examen.fecha,
+      imagenUrl: examen.imagenUrl,
+    }));
+
+    res.json({ examenes: examenesConImagen });
+  } catch (error) {
+    console.error(error);
+    res.json({ msg: "Error al obtener los exámenes" });
   }
-
-  res.json({ examenes });
 };
 
 export {
@@ -215,4 +278,6 @@ export {
   crearHistorial,
   eliminarHistorial,
   obtenerExamenes,
+  crearExamen,
+  eliminarExamen,
 };

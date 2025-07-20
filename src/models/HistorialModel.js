@@ -23,7 +23,7 @@ const Historial = db.define("historiales", {
     type: Sequelize.TEXT,
     allowNull: false,
   },
-  idPaciente: {
+  pacienteId: {
     type: Sequelize.INTEGER,
     allowNull: false,
   },

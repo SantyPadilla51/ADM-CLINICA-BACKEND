@@ -15,11 +15,11 @@ const Examen = db.define("examenes", {
     type: Sequelize.DATE,
     defaultValue: Sequelize.NOW,
   },
-  file: {
+  imagenUrl: {
     type: Sequelize.TEXT,
-    allowNull: true,
+    allowNull: false,
   },
-  idPaciente: {
+  pacienteId: {
     type: Sequelize.INTEGER,
     allowNull: false,
   },
