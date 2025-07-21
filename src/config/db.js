@@ -1,7 +1,9 @@
 import { Sequelize } from "sequelize";
 import dotenv from "dotenv";
+import dns from "dns";
 
 dotenv.config();
+dns.setDefaultResultOrder("ipv4first");
 
 const db = new Sequelize(
   "postgresql://postgres:Paulmccartney29@db.hzapzfyxfsvaabpvvgis.supabase.co:5432/postgres",
