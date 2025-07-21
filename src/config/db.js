@@ -3,13 +3,22 @@ import dotenv from "dotenv";
 
 dotenv.config();
 
-const db = new Sequelize(process.env.DATABASE_URL, {
-  dialect: "postgres",
-  protocol: "postgres",
-  define: {
-    timestamps: false,
-  },
-});
+const db = new Sequelize(
+  "postgresql://postgres:Paulmccartney29@db.hzapzfyxfsvaabpvvgis.supabase.co:5432/postgres",
+  {
+    dialect: "postgres",
+    protocol: "postgres",
+    dialectOptions: {
+      ssl: {
+        require: true,
+        rejectUnauthorized: false,
+      },
+    },
+    define: {
+      timestamps: false,
+    },
+  }
+);
 
 export const connectDB = async () => {
   try {
