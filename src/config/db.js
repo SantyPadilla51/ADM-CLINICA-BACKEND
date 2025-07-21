@@ -18,11 +18,13 @@ const db = new Sequelize(
   }
 );
 
-try {
-  await sequelize.authenticate();
-  console.log("✅ ¡Conexión exitosa!");
-} catch (err) {
-  console.error("❌ Error al conectar:", err.message);
-}
+const connectDB = async () => {
+  try {
+    await db.authenticate();
+    console.log("✅ ¡Conexión exitosa!");
+  } catch (err) {
+    console.error("❌ Error al conectar:", err.message);
+  }
+};
 
-export default db;
+export default connectDB;
