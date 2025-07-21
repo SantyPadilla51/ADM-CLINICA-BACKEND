@@ -1,5 +1,5 @@
 import { Sequelize } from "sequelize";
-import db from "../config/db.js";
+import { db } from "../config/db.js";
 
 const Historial = db.define("historiales", {
   id: {
