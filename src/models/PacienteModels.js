@@ -2,49 +2,56 @@ import { Sequelize } from "sequelize";
 import { db } from "../config/db.js";
 import Doctor from "./DoctorModels.js";
 
-const Paciente = db.define("pacientes", {
-  nombre: {
-    type: Sequelize.TEXT,
-    allowNull: false,
-  },
-  apellido: {
-    type: Sequelize.TEXT,
-    allowNull: false,
-  },
-  email: {
-    type: Sequelize.TEXT,
-    allowNull: true,
-  },
-  dni: {
-    type: Sequelize.TEXT,
-    allowNull: false,
-    unique: true,
-  },
-  edad: {
-    type: Sequelize.TEXT,
-    allowNull: false,
-  },
-  telefono: {
-    type: Sequelize.TEXT,
-    allowNull: false,
-  },
-  sexo: {
-    type: Sequelize.TEXT,
-    allowNull: false,
-  },
-  cobertura: {
-    type: Sequelize.TEXT,
-    allowNull: true,
-  },
-  doctorId: {
-    type: Sequelize.INTEGER,
-    allowNull: false,
-    references: {
-      model: Doctor,
-      key: "id",
+const Paciente = db.define(
+  "pacientes",
+  {
+    nombre: {
+      type: Sequelize.TEXT,
+      allowNull: false,
+    },
+    apellido: {
+      type: Sequelize.TEXT,
+      allowNull: false,
+    },
+    email: {
+      type: Sequelize.TEXT,
+      allowNull: true,
+    },
+    dni: {
+      type: Sequelize.TEXT,
+      allowNull: false,
+      unique: true,
+    },
+    edad: {
+      type: Sequelize.TEXT,
+      allowNull: false,
+    },
+    telefono: {
+      type: Sequelize.TEXT,
+      allowNull: false,
+    },
+    sexo: {
+      type: Sequelize.TEXT,
+      allowNull: false,
+    },
+    cobertura: {
+      type: Sequelize.TEXT,
+      allowNull: true,
+    },
+    doctorId: {
+      type: Sequelize.INTEGER,
+      allowNull: false,
+      references: {
+        model: Doctor,
+        key: "id",
+      },
     },
   },
-});
+  {
+    tableName: "pacientes",
+    timestamps: false,
+  }
+);
 
 Doctor.hasMany(Paciente, { foreignKey: "doctorId" });
 Paciente.belongsTo(Doctor, { foreignKey: "doctorId" });
