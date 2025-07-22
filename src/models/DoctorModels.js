@@ -46,6 +46,8 @@ const Doctor = db.define(
     },
   },
   {
+    tableName: "doctores",
+    timestamps: false,
     hooks: {
       beforeCreate: async (doctor) => {
         if (doctor.password) {
