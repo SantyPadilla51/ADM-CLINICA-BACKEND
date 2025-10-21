@@ -102,7 +102,6 @@ const actualizarPaciente = async (req, res) => {
 
 const eliminarPaciente = async (req, res) => {
   const { id } = req.params;
-  console.log(id);
 
   const paciente = await Paciente.findOne({
     where: { id },
