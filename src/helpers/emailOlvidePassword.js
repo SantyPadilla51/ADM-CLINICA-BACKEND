@@ -6,8 +6,8 @@ const emailOlvidePassword = async ({ email, nombre, token }) => {
     port: 465,
     secure: true,
     auth: {
-      user: "padillaezequiel597@gmail.com",
-      pass: "wuns toxh fgch foab",
+      user: "padillasantiago51@gmail.com",
+      pass: "qkbg crxc omha dybf",
     },
   });
 
