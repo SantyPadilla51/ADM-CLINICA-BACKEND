@@ -4,23 +4,37 @@ const emailOlvidePassword = async ({ email, nombre, token }) => {
   const transporter = nodemailer.createTransport({
     host: "smtp.gmail.com",
     port: 465,
-    secure: true,
     auth: {
       user: "padillasantiago51@gmail.com",
-      pass: "qkbg crxc omha dybf",
+      pass: "qoxd puwy zofi zdzf",
     },
   });
 
   //Enviar email
   const sendEmail = await transporter.sendMail({
-    from: '"Administrador de Pacientes" <padilllaezequiel597@gmail.com>',
+    from: '"Administrador de Pacientes" <padillasantiag51@gmail.com>',
     to: email,
     subject: "Olvide mi Password",
     text: "Restablece tu password",
     html: `
-            <h1>Hola ${nombre}!</h1>
-            <p>Para restablcer tu password, haz click en el siguiente enlace:</p>
-            <a href="https://adm-clinica-frontend.vercel.app/olvide-password/${token}">Restablecer Password</a>
+        <div style="font-family: 'Helvetica Neue', Arial, sans-serif; background-color: #f9fafb; padding: 40px 0; text-align: center;">
+        <div style="background-color: #ffffff; max-width: 500px; margin: 0 auto; border-radius: 12px; padding: 30px 40px; box-shadow: 0 2px 10px rgba(0,0,0,0.08);">
+        <h1 style="color: #111827; font-size: 24px;">¡Hola ${nombre}!</h1>
+        <p style="color: #374151; font-size: 16px; line-height: 1.6;">
+        Recibimos una solicitud para restablecer tu contraseña en <strong>Administrador de Pacientes</strong>.<br/>
+        Si fuiste tú, haz clic en el siguiente botón para crear una nueva contraseña:
+        </p>
+        <a href="https://adm-clinica-frontend.vercel.app/olvide-password/${token}"
+        style="display: inline-block; background-color: #2563eb; color: #ffffff; text-decoration: none; padding: 12px 24px; border-radius: 8px; font-weight: bold; margin-top: 20px;">
+        Restablecer contraseña
+        </a>
+        <p style="color: #6b7280; font-size: 14px; margin-top: 30px;">
+        Si tú no solicitaste este cambio, puedes ignorar este mensaje. Tu contraseña actual seguirá siendo válida.
+        </p>
+        <hr style="border: none; border-top: 1px solid #e5e7eb; margin: 30px 0;">
+        <p style="color: #9ca3af; font-size: 13px;">— El equipo de <strong>Administrador de Pacientes</strong></p>
+        </div>
+        </div>
         `,
   });
 };
