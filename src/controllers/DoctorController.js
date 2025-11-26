@@ -22,7 +22,6 @@ const crearUsuario = async (req, res) => {
 
       emailRegistro({
         email,
-        nombre,
         token: doctorGuardado.token,
       });
 

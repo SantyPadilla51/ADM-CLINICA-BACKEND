@@ -1,30 +1,23 @@
 import nodemailer from "nodemailer";
 
 const emailOlvidePassword = async ({ email, nombre, token }) => {
-  const transporter = nodemailer.createTransport({
-    host: "smtp.gmail.com",
-    port: 465,
-    auth: {
-      user: "padillasantiago51@gmail.com",
-      pass: "qoxd puwy zofi zdzf",
-    },
-  });
+  try {
+    const url = `https://adm-clinica-frontend.vercel.app/olvide-password/${token}`;
 
-  //Enviar email
-  const sendEmail = await transporter.sendMail({
-    from: '"Administrador de Pacientes" <padillasantiag51@gmail.com>',
-    to: email,
-    subject: "Olvide mi Password",
-    text: "Restablece tu password",
-    html: `
-        <div style="font-family: 'Helvetica Neue', Arial, sans-serif; background-color: #f9fafb; padding: 40px 0; text-align: center;">
+    await resend.emails.send({
+      from: "Administrador de Pacientes <test@sancodehub.com>",
+      to: email,
+      subject: "Reestablecer Password",
+      html: `
+       
+<div style="font-family: 'Helvetica Neue', Arial, sans-serif; background-color: #f9fafb; padding: 40px 0; text-align: center;">
         <div style="background-color: #ffffff; max-width: 500px; margin: 0 auto; border-radius: 12px; padding: 30px 40px; box-shadow: 0 2px 10px rgba(0,0,0,0.08);">
         <h1 style="color: #111827; font-size: 24px;">¡Hola ${nombre}!</h1>
         <p style="color: #374151; font-size: 16px; line-height: 1.6;">
         Recibimos una solicitud para restablecer tu contraseña en <strong>Administrador de Pacientes</strong>.<br/>
         Si fuiste tú, haz clic en el siguiente botón para crear una nueva contraseña:
         </p>
-        <a href="https://adm-clinica-frontend.vercel.app/olvide-password/${token}"
+        <a href="${url}"
         style="display: inline-block; background-color: #2563eb; color: #ffffff; text-decoration: none; padding: 12px 24px; border-radius: 8px; font-weight: bold; margin-top: 20px;">
         Restablecer contraseña
         </a>
@@ -35,8 +28,13 @@ const emailOlvidePassword = async ({ email, nombre, token }) => {
         <p style="color: #9ca3af; font-size: 13px;">— El equipo de <strong>Administrador de Pacientes</strong></p>
         </div>
         </div>
-        `,
-  });
+      `,
+    });
+
+    console.log("📧 Email de confirmación enviado a:", email);
+  } catch (error) {
+    console.log("❌ Error enviando email:", error);
+  }
 };
 
 export default emailOlvidePassword;

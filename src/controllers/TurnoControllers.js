@@ -34,8 +34,8 @@ const obtenerTurnos = async (req, res) => {
 };
 
 const editarTurno = async (req, res) => {
-  const { id } = req.params; // id del turno a editar
-  const { paciente, fecha, hora, estado } = req.body; // datos enviados desde el frontend
+  const { id } = req.params;
+  const { paciente, fecha, hora, estado } = req.body;
 
   try {
     // Buscar el turno existente
@@ -47,14 +47,6 @@ const editarTurno = async (req, res) => {
         msg: "Turno no encontrado",
       });
     }
-
-    // Verificar que el turno pertenezca al doctor autenticado
-    // if (turno.doctorId !== req.doctor.id) {
-    //   return res.status(401).json({
-    //     ok: false,
-    //     msg: "No tienes permisos para editar este turno",
-    //   });
-    // }
 
     // Actualizar los datos del turno
     turno.paciente = paciente;
@@ -70,7 +62,6 @@ const editarTurno = async (req, res) => {
       msg: "Turno actualizado correctamente",
     });
   } catch (error) {
-    console.error(error);
     res.status(500).json({
       ok: false,
       msg: "Error al editar el turno",
