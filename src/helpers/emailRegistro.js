@@ -13,7 +13,7 @@ const emailRegistro = async ({ email, token }) => {
     const confirmUrl = `https://adm-clinica-frontend.vercel.app/confirmar/${token}`;
 
     const response = await resend.emails.send({
-      from: "Administrador de Pacientes <test@sancodehub.com>",
+      from: "Administrador de Pacientes <noreply@sancodehub.com>",
       to: email,
       subject: "Confirma tu cuenta",
       html: `

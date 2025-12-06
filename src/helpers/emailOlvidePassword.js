@@ -7,7 +7,7 @@ const emailOlvidePassword = async ({ email, nombre, token }) => {
     const url = `https://adm-clinica-frontend.vercel.app/olvide-password/${token}`;
 
     const response = await resend.emails.send({
-      from: "Administrador de Pacientes <no-reply@sancodehub.com>",
+      from: "Administrador de Pacientes <noreply@sancodehub.com>",
       to: email,
       subject: "Restablecer tu contraseña",
       html: `
