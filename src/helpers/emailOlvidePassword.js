@@ -1,6 +1,6 @@
 import { Resend } from "resend";
 
-const resend = new Resend(re_8QPoTvTb_48tYNPYtqVxaYn4sAKEy9Ara);
+const resend = new Resend("re_8QPoTvTb_48tYNPYtqVxaYn4sAKEy9Ara");
 
 const emailOlvidePassword = async ({ email, nombre, token }) => {
   try {
