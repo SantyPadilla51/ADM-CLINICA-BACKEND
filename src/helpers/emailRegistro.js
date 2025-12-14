@@ -1,20 +1,25 @@
-// emailRegistro.js
-import { Resend } from "resend";
-
-const resend = new Resend("re_8QPoTvTb_48tYNPYtqVxaYn4sAKEy9Ara");
-
-const { data, error } = await resend.apiKeys.create({
-  name: "Production",
-  permission: "full_access",
-});
+import nodemailer from "nodemailer";
 
 const emailRegistro = async ({ email, token }) => {
   try {
     const confirmUrl = `https://adm-clinica-frontend.vercel.app/confirmar/${token}`;
 
-    const response = await resend.emails.send({
+    // Transporter SMTP
+    const transporter = nodemailer.createTransport({
+      host: smtp.hostinger.com,
+      port: 465,
+      secure: process.env.SMTP_PORT == 465, // true si es 465
+      auth: {
+        user: "noreply@sancodehub.com",
+        pass: "Los3Mosqueteros.",
+      },
+    });
+
+    // Envío de email
+    const info = await transporter.sendMail({
       from: "Administrador de Pacientes <noreply@sancodehub.com>",
       to: email,
+      replyTo: "soporte@sancodehub.com",
       subject: "Confirma tu cuenta",
       html: `
         <div style="font-family: Arial, sans-serif; padding: 20px;">
@@ -40,9 +45,9 @@ const emailRegistro = async ({ email, token }) => {
       `,
     });
 
-    console.log("📨 Email enviado correctamente:", response);
+    console.log("📨 Email enviado correctamente:", info.messageId);
   } catch (error) {
-    console.error("❌ Error al enviar el correo con Resend:", error);
+    console.error("❌ Error al enviar el correo con SMTP:", error);
   }
 };
 

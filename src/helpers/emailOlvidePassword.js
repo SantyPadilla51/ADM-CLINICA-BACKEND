@@ -9,6 +9,7 @@ const emailOlvidePassword = async ({ email, nombre, token }) => {
     const response = await resend.emails.send({
       from: "Administrador de Pacientes <noreply@sancodehub.com>",
       to: email,
+      reply_to: "soporte@sancodehub.com",
       subject: "Restablecer tu contraseña",
       html: `
       <div style="font-family: 'Helvetica Neue', Arial, sans-serif; background-color: #f9fafb; padding: 40px 0; text-align: center;">
