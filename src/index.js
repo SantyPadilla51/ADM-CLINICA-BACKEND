@@ -28,7 +28,7 @@ const iniciarServer = async () => {
   app.use(routerDoc);
   app.use(routerTurno);
 
-  const PORT = process.env.PORT || 4000;
+  const PORT = process.env.PORT || 3000;
   app.listen(PORT, () => {
     console.log(`Conectado al puerto: ${PORT}`);
   });
