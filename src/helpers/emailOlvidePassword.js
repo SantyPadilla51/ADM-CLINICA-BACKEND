@@ -7,11 +7,14 @@ const emailOlvidePassword = async ({ email, nombre, token }) => {
     // Transporter SMTP
     const transporter = nodemailer.createTransport({
       host: "smtp.hostinger.com",
-      port: 465,
-      secure: process.env.SMTP_PORT == 465, // true si es 465
+      port: 587,
+      secure: false,
       auth: {
         user: "noreply@sancodehub.com",
         pass: "Los3Mosqueteros.",
+      },
+      tls: {
+        rejectUnauthorized: false,
       },
     });
 
