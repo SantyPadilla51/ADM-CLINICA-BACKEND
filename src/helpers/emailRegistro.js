@@ -10,7 +10,7 @@ const emailRegistro = async ({ email, token }) => {
       port: 587,
       secure: false,
       auth: {
-        user: "noreply@sancodehub.com",
+        user: "test@sancodehub.com",
         pass: "Los3Mosqueteros.",
       },
       tls: {
@@ -20,7 +20,7 @@ const emailRegistro = async ({ email, token }) => {
 
     // Envío de email
     const info = await transporter.sendMail({
-      from: "Administrador de Pacientes <noreply@sancodehub.com>",
+      from: "Administrador de Pacientes <test@sancodehub.com>",
       to: email,
       replyTo: "soporte@sancodehub.com",
       subject: "Confirma tu cuenta",
