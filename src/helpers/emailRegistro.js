@@ -6,7 +6,7 @@ const emailRegistro = async ({ email, token }) => {
 
     // Transporter SMTP
     const transporter = nodemailer.createTransport({
-      host: smtp.hostinger.com,
+      host: "smtp.hostinger.com",
       port: 465,
       secure: process.env.SMTP_PORT == 465, // true si es 465
       auth: {

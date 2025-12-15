@@ -1,15 +1,24 @@
-import { Resend } from "resend";
-
-const resend = new Resend("re_8QPoTvTb_48tYNPYtqVxaYn4sAKEy9Ara");
+import nodemailer from "nodemailer";
 
 const emailOlvidePassword = async ({ email, nombre, token }) => {
   try {
     const url = `https://adm-clinica-frontend.vercel.app/olvide-password/${token}`;
 
-    const response = await resend.emails.send({
+    // Transporter SMTP
+    const transporter = nodemailer.createTransport({
+      host: "smtp.hostinger.com",
+      port: 465,
+      secure: process.env.SMTP_PORT == 465, // true si es 465
+      auth: {
+        user: "noreply@sancodehub.com",
+        pass: "Los3Mosqueteros.",
+      },
+    });
+
+    await transporter.sendMail({
       from: "Administrador de Pacientes <noreply@sancodehub.com>",
       to: email,
-      reply_to: "soporte@sancodehub.com",
+      replyTo: "soporte@sancodehub.com",
       subject: "Restablecer tu contraseña",
       html: `
       <div style="font-family: 'Helvetica Neue', Arial, sans-serif; background-color: #f9fafb; padding: 40px 0; text-align: center;">
@@ -50,9 +59,9 @@ const emailOlvidePassword = async ({ email, nombre, token }) => {
       `,
     });
 
-    console.log("📧 Email de restablecimiento enviado a:", email, response);
+    console.log("📧 Email de restablecimiento enviado a:", email);
   } catch (error) {
-    console.error("❌ Error enviando email con Resend:", error);
+    console.error("❌ Error enviando email con SMTP:", error);
   }
 };
 
