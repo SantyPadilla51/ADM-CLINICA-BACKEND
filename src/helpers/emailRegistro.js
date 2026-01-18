@@ -8,6 +8,7 @@ const emailRegistro = async ({ email, token }) => {
     const transporter = nodemailer.createTransport({
       host: "smtp.gmail.com",
       port: 465,
+      secure: true,
       auth: {
         user: "padillasantiago51@gmail.com",
         pass: "lcny kgbq leoa zhzg",
@@ -16,9 +17,8 @@ const emailRegistro = async ({ email, token }) => {
 
     // Envío de email
     const info = await transporter.sendMail({
-      from: "Administrador de Pacientes <test@sancodehub.com>",
+      from: "Administrador de Pacientes <padillasantiago51@gmail.com>",
       to: email,
-      replyTo: "soporte@sancodehub.com",
       subject: "Confirma tu cuenta",
       html: `
         <div style="font-family: Arial, sans-serif; padding: 20px;">

@@ -8,6 +8,7 @@ const emailOlvidePassword = async ({ email, nombre, token }) => {
     const transporter = nodemailer.createTransport({
       host: "smtp.gmail.com",
       port: 465,
+      secure: true,
       auth: {
         user: "padillasantiago51@gmail.com",
         pass: "lcny kgbq leoa zhzg",
@@ -15,9 +16,8 @@ const emailOlvidePassword = async ({ email, nombre, token }) => {
     });
 
     await transporter.sendMail({
-      from: "Administrador de Pacientes <noreply@sancodehub.com>",
+      from: "Administrador de Pacientes <padillasantiago51@gmail.com>",
       to: email,
-      replyTo: "soporte@sancodehub.com",
       subject: "Restablecer tu contraseña",
       html: `
       <div style="font-family: 'Helvetica Neue', Arial, sans-serif; background-color: #f9fafb; padding: 40px 0; text-align: center;">
