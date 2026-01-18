@@ -6,15 +6,11 @@ const emailRegistro = async ({ email, token }) => {
 
     // Transporter SMTP
     const transporter = nodemailer.createTransport({
-      host: "smtp.hostinger.com",
-      port: 587,
-      secure: false,
+      host: "smtp.gmail.com",
+      port: 465,
       auth: {
-        user: "test@sancodehub.com",
-        pass: "Los3Mosqueteros.",
-      },
-      tls: {
-        rejectUnauthorized: false,
+        user: "padillasantiago51@gmail.com",
+        pass: "lcny kgbq leoa zhzg",
       },
     });
 

@@ -6,15 +6,11 @@ const emailOlvidePassword = async ({ email, nombre, token }) => {
 
     // Transporter SMTP
     const transporter = nodemailer.createTransport({
-      host: "smtp.hostinger.com",
-      port: 587,
-      secure: false,
+      host: "smtp.gmail.com",
+      port: 465,
       auth: {
-        user: "noreply@sancodehub.com",
-        pass: "Los3Mosqueteros.",
-      },
-      tls: {
-        rejectUnauthorized: false,
+        user: "padillasantiago51@gmail.com",
+        pass: "lcny kgbq leoa zhzg",
       },
     });
 

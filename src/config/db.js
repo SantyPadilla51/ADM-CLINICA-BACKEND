@@ -15,7 +15,7 @@ const db = new Sequelize(
         rejectUnauthorized: false,
       },
     },
-  }
+  },
 );
 
 const connectDB = async () => {
