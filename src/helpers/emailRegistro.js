@@ -2,7 +2,7 @@ import nodemailer from "nodemailer";
 
 const emailRegistro = async ({ email, token }) => {
   try {
-    const confirmUrl = `https://adm-clinica-frontend.vercel.app/confirmar/${token}`;
+    const confirmUrl = `https://adm-clinica-frontend.vercel.app/confirmar-cuenta/${token}`;
 
     // Transporter SMTP
     const transporter = nodemailer.createTransport({
