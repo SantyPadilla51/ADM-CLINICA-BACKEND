@@ -14,10 +14,11 @@ import {
   eliminarExamen,
 } from "../controllers/PacienteController.js";
 import authMiddleware from "../middleware/authMiddleware.js";
+import { demoUser } from "../middleware/demoUser.js";
 
 const router = Router();
 
-router.post("/crear-paciente", authMiddleware, crearPaciente);
+router.post("/crear-paciente", authMiddleware, demoUser, crearPaciente);
 router.get("/pacientes", authMiddleware, obtenerPacientes);
 router.get("/pacientes/:dni", authMiddleware, obtenerPaciente);
 router.get("/pacienteId/:id", authMiddleware, obtenerPacienteID);

@@ -20,6 +20,12 @@ const obtenerPaciente = async (req, res) => {
     where: { dni },
   });
 
+  if (!paciente) {
+    return res.status(404).json({
+      msg: "El paciente ya no existe o fue eliminado.",
+    });
+  }
+
   const doctorIdPaciente = paciente[0].doctorId;
 
   if (doctorIdPaciente !== req.doctor.id) {
@@ -32,16 +38,29 @@ const obtenerPaciente = async (req, res) => {
 const obtenerPacienteID = async (req, res) => {
   const { id } = req.params;
 
-  const paciente = await Paciente.findAll({
-    where: { id },
-  });
+  try {
+    const paciente = await Paciente.findOne({
+      where: { id },
+    });
 
-  const doctorIdPaciente = paciente[0].doctorId;
+    if (!paciente) {
+      return res.status(404).json({
+        msg: "El paciente ya no existe o fue eliminado.",
+      });
+    }
 
-  if (doctorIdPaciente !== req.doctor.id) {
-    res.json({ msg: "Accion no valida" });
-  } else {
-    res.json({ paciente });
+    if (paciente.doctorId !== req.doctor.id) {
+      return res.status(403).json({
+        msg: "Acción no válida. No tienes permisos para ver este paciente.",
+      });
+    }
+
+    return res.json({ paciente });
+  } catch (error) {
+    console.error("Error al obtener el paciente:", error);
+    return res.status(500).json({
+      msg: "Hubo un error en el servidor al procesar la solicitud.",
+    });
   }
 };
 
@@ -188,35 +207,34 @@ const eliminarHistorial = async (req, res) => {
 const crearExamen = async (req, res) => {
   const { descripcion, pacienteId, imagenUrl } = req.body;
 
-  try {
-    const examen = await Examen.create({
-      descripcion,
-      pacienteId,
-      imagenUrl,
-    });
+  console.log(descripcion, pacienteId, imagenUrl);
 
-    res.json({ ok: true, msg: "Examen guardado con imagen" });
-  } catch (error) {
-    res.status(500).json({ ok: false, msg: error.message });
-  }
+  // try {
+  //   const examen = await Examen.create({
+  //     descripcion,
+  //     pacienteId,
+  //     imagenUrl,
+  //   });
+
+  //   res.json({ ok: true, msg: "Examen guardado con imagen" });
+  // } catch (error) {
+  //   res.status(500).json({ ok: false, msg: error.message });
+  // }
 };
 
 const eliminarExamen = async (req, res) => {
   const { id } = req.params;
 
   try {
-    // Buscar el examen incluyendo la información del paciente si es necesario
     const examen = await Examen.findByPk(id);
 
     if (!examen) {
       return res.status(404).json({ ok: false, msg: "El examen no existe" });
     }
 
-    // Extraer el nombre del archivo de la URL de la imagen
     const imagenUrl = examen.imagenUrl;
     const fileName = imagenUrl.split("/").pop();
 
-    // Eliminar la imagen del almacenamiento en Supabase
     const { error: storageError } = await supabase.storage
       .from("examenes")
       .remove([`imagenes/${fileName}`]);
@@ -226,7 +244,6 @@ const eliminarExamen = async (req, res) => {
       throw new Error("Error al eliminar la imagen del almacenamiento");
     }
 
-    // Eliminar el registro de la base de datos
     await examen.destroy();
 
     res.json({ ok: true, msg: "Examen e imagen eliminados correctamente" });
