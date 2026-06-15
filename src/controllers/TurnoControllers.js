@@ -26,11 +26,22 @@ const crearTurno = async (req, res) => {
 
 const obtenerTurnos = async (req, res) => {
   try {
-    const turnos = await Turno.findAll({ where: { doctorId: req.doctor.id } });
+    if (!req.doctor || !req.doctor.id) {
+      return res
+        .status(400)
+        .json({ ok: false, msg: "Falta la autenticación del doctor" });
+    }
 
+    const turnos = await Turno.findAll({ where: { doctorId: req.doctor.id } });
+    console.log(turnos);
     res.json(turnos);
   } catch (error) {
-    res.json({ ok: false, msg: "Hubo un error al obtener los turnos" });
+    console.error("Error en obtenerTurnos:", error);
+
+    res.status(500).json({
+      ok: false,
+      msg: "Hubo un error al obtener los turnos",
+    });
   }
 };
 
