@@ -6,8 +6,11 @@ const Turno = db.define(
   "turnos",
   {
     paciente: { type: Sequelize.TEXT, allowNull: false },
-    hora: { type: Sequelize.TIME, allowNull: false },
-    fecha: { type: Sequelize.DATE, allowNull: false },
+    hora: { type: Sequelize.TEXT, allowNull: false },
+    min: { type: Sequelize.TEXT, allowNull: false },
+    dia: { type: Sequelize.TEXT, allowNull: false },
+    mes: { type: Sequelize.TEXT, allowNull: false },
+    anio: { type: Sequelize.TEXT, allowNull: false },
     estado: {
       type: Sequelize.TEXT,
       allowNull: false,
@@ -24,7 +27,7 @@ const Turno = db.define(
   },
   {
     timestamps: false,
-  }
+  },
 );
 
 export default Turno;

@@ -207,19 +207,17 @@ const eliminarHistorial = async (req, res) => {
 const crearExamen = async (req, res) => {
   const { descripcion, pacienteId, imagenUrl } = req.body;
 
-  console.log(descripcion, pacienteId, imagenUrl);
+  try {
+    const examen = await Examen.create({
+      descripcion,
+      pacienteId,
+      imagenUrl,
+    });
 
-  // try {
-  //   const examen = await Examen.create({
-  //     descripcion,
-  //     pacienteId,
-  //     imagenUrl,
-  //   });
-
-  //   res.json({ ok: true, msg: "Examen guardado con imagen" });
-  // } catch (error) {
-  //   res.status(500).json({ ok: false, msg: error.message });
-  // }
+    res.json({ ok: true, msg: "Examen guardado" });
+  } catch (error) {
+    res.status(500).json({ ok: false, msg: error.message });
+  }
 };
 
 const eliminarExamen = async (req, res) => {
@@ -232,26 +230,43 @@ const eliminarExamen = async (req, res) => {
       return res.status(404).json({ ok: false, msg: "El examen no existe" });
     }
 
-    const imagenUrl = examen.imagenUrl;
-    const fileName = imagenUrl.split("/").pop();
+    if (examen.imagenUrl) {
+      try {
+        const urlPartes = examen.imagenUrl.split("/examenes/");
+        const rutaArchivo = urlPartes[1];
 
-    const { error: storageError } = await supabase.storage
-      .from("examenes")
-      .remove([`imagenes/${fileName}`]);
+        if (rutaArchivo) {
+          console.log(
+            "Intentando borrar del Storage de Supabase:",
+            rutaArchivo,
+          );
 
-    if (storageError) {
-      console.error("Error al eliminar la imagen:", storageError);
-      throw new Error("Error al eliminar la imagen del almacenamiento");
+          const { error: storageError } = await supabase.storage
+            .from("examenes")
+            .remove([rutaArchivo]);
+
+          if (storageError) {
+            console.error(
+              "Advertencia al eliminar la imagen de Supabase:",
+              storageError.message,
+            );
+          } else {
+            console.log("Imagen eliminada con éxito de Supabase Storage");
+          }
+        }
+      } catch (errParsing) {
+        console.error("Error al procesar la URL de la imagen:", errParsing);
+      }
     }
 
     await examen.destroy();
 
     res.json({ ok: true, msg: "Examen e imagen eliminados correctamente" });
   } catch (error) {
-    console.error("Error en eliminarExamen:", error);
+    console.error("Error crítico en eliminarExamen:", error);
     res.status(500).json({
       ok: false,
-      msg: error.message || "Error al eliminar el examen",
+      msg: "Error interno al eliminar el examen",
     });
   }
 };
