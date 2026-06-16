@@ -40,6 +40,8 @@ const obtenerTurnos = async (req, res) => {
 
     res.status(500).json({
       ok: false,
+      error: error.message || error, // <-- Agregá esto temporalmente
+      stack: error.stack,
       msg: "Hubo un error al obtener los turnos",
     });
   }
